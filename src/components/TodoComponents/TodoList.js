@@ -7,8 +7,9 @@ const TodoList = props => {
 
     return (
         <div className='todo-list'>
+            
             {props.tasks.map(task => (
-                <Todo toggleCompleted={props.toggleCompleted}className='todo'{...props} key={task.id} task={task}/>
+                <Todo toggleCompleted={props.toggleCompleted}className='todo' key={task.id} task={task}/>
             ))}
         </div>
     );

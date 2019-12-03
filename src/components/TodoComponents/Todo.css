@@ -89,6 +89,7 @@ input {
     height: 2rem;
     width: 20rem;
     border-radius: 5px;
+    font-size: 1.4rem;
 }
 
 button {

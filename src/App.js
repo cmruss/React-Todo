@@ -3,18 +3,7 @@ import TodoForm from './components/TodoComponents/TodoForm';
 import TodoList from './components/TodoComponents/TodoList';
 import './components/TodoComponents/Todo.css';
 
-const tasks = [
-  {
-    task: 'Organize Garage',
-    id: 1528817077286,
-    completed: false
-  },
-  {
-    task: 'Bake Cookies',
-    id: 1528817084358,
-    completed: false
-  }
-];
+const tasks = [];
 
 class App extends Component {
   // you will need a place to store your state in this component.
@@ -22,7 +11,8 @@ class App extends Component {
     super();
     this.state = {
       tasks: tasks,
-      input: ''
+      input: '',
+      query: []
     };
   }
   // design `App` to be the parent component of your application.
@@ -49,9 +39,9 @@ class App extends Component {
     console.log(tasks)
   };
 
-  toggleCompleted = taskId => {
+  toggleCompleted = completedId => {
     const tasks = this.state.tasks.map(task =>{
-      if (task.id === taskId){
+      if (task.id === completedId){
         task.completed = !task.completed
       }
       return task
@@ -70,6 +60,65 @@ class App extends Component {
     })
   };
 
+  addLocalStorage() {
+    for (let key in this.state) {
+      if (localStorage.hasOwnProperty(key)) {
+        let task = localStorage.getItem(key);
+        try{
+          task = JSON.parse(task);
+          this.setState({[key]: task})
+        }
+        catch(event) {
+          this.setState({[key]:task})
+        };
+      };
+    };
+  };
+
+  saveLocalStorage() {
+    for(let key in this.state) {
+      localStorage.setItem(key, JSON.stringify(this.state[key]))
+    };
+  };
+
+  componentDidMount() {
+    this.setState({
+      query: this.props.tasks
+    })
+    this.addLocalStorage();
+    window.addEventListener('beforeunload', this.saveLocalStorage.bind(this))
+  };
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      query: nextProps.tasks
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.saveLocalStorage.bind(this))
+  };
+
+  // handleQuery(event) {
+  //   let currentTasks = [];
+  //   let queryTasks = [];
+
+  //   if (event.target.value !== '') {
+  //     currentTasks = tasks;
+  //     queryTasks = currentTasks.filter(task => {
+  //       const lower = task.toLowerCase();
+  //       const queried = event.target.value.toLowerCase();
+  //       return lower.includes(queried);
+  //     });
+  //   } else {
+  //     queryTasks = tasks;
+  //   }
+  //   this.setState({
+  //     query: queryTasks 
+  //   });
+  // }
+
+
   render() {
     return (
       <div className='app'>
@@ -80,6 +129,7 @@ class App extends Component {
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}
             removeCompleted={this.removeCompleted}
+            handleQuery={this.handleQuery}
           />
           <TodoList toggleCompleted={this.toggleCompleted} tasks={this.state.tasks}/>
         </div>
