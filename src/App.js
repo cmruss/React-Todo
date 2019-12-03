@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TodoForm from './components/TodoComponents/TodoForm';
 import TodoList from './components/TodoComponents/TodoList';
-
+import './components/TodoComponents/Todo.css';
 
 const tasks = [
   {
@@ -57,7 +57,7 @@ class App extends Component {
       return task
     });
     this.setState({tasks, task:''})
-  }
+  };
 
   removeCompleted = event => {
     event.preventDefault();
@@ -66,21 +66,23 @@ class App extends Component {
         tasks: prevState.tasks.filter(task => {
           return !task.completed;
         })
-      }
+      };
     })
-  }
+  };
 
   render() {
     return (
-      <div>
-        <h2>Welcome to your Todo App!</h2>
-        <TodoForm
-          input={this.state.input}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
-          removeCompleted={this.removeCompleted}
-        />
-        <TodoList toggleCompleted={this.toggleCompleted} tasks={this.state.tasks}/>
+      <div className='app'>
+        <h2 className='title'>Welcome to your Todo App!</h2>
+        <div className="outline-offset">
+          <TodoForm
+            input={this.state.input}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+            removeCompleted={this.removeCompleted}
+          />
+          <TodoList toggleCompleted={this.toggleCompleted} tasks={this.state.tasks}/>
+        </div>
       </div>
     );
   }
